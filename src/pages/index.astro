@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import { ReadmeShowcase } from '../components/ReadmeShowcase';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="coderxiaoluo 的 GitHub 风格个人主页仿制原型。" />
+    <title>不是很菜 | coderxiaoluo</title>
+  </head>
+  <body>
+    <main class="page-shell">
+      <div class="profile-grid">
+        <aside class="sidebar" aria-label="Profile sidebar">
+          <div class="avatar-wrap">
+            <img
+              class="avatar"
+              src="https://avatars.githubusercontent.com/u/112073238?v=4"
+              alt="不是很菜的 GitHub 头像"
+            />
+            <div class="status-dot" title="Current status">🍍</div>
+          </div>
+
+          <h2 class="profile-name">不是很菜</h2>
+          <p class="profile-handle">coderxiaoluo</p>
+          <button class="follow-button" type="button">Follow</button>
+
+          <p class="bio">吃饭睡觉敲代码</p>
+
+          <ul class="meta-list">
+            <li><strong>3</strong> followers · <strong>2</strong> following</li>
+            <li>⌖ 重庆</li>
+            <li>
+              <a href="https://github.com/coderxiaoluo" target="_blank" rel="noreferrer">
+                github.com/coderxiaoluo
+              </a>
+            </li>
+          </ul>
+
+          <div class="sidebar-rule"></div>
+          <a class="report-link" href="https://github.com/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fcoderxiaoluo" target="_blank" rel="noreferrer">
+            Block or report user
+          </a>
+        </aside>
+
+        <section class="main-stack" aria-label="Main content">
+          <ReadmeShowcase />
+        </section>
+      </div>
+    </main>
+
+    <div class="floating-cube" aria-hidden="true">3D</div>
+  </body>
+</html>
