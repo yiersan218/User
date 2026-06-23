@@ -62,7 +62,7 @@ export function ReadmeShowcase() {
 
       <a className="typing-title" href="https://www.yuque.com/coderxiaoluo" target="_blank" rel="noreferrer">
         <img
-          src="https://readme-typing-svg.herokuapp.com/?lines=console.log(%22Hello%2C%20World!%22);小波同学祝您今天愉快!&center=true&size=27"
+          src="https://readme-typing-svg.herokuapp.com/?lines=console.log(%22Hello%2C%20World!%22);小波同学祝您今天愉快!&center=true&size=34"
           alt="小波同学祝您今天愉快"
         />
       </a>

@@ -2,7 +2,7 @@
 
 ## 阶段总结
 
-当前目标是设计并实现一个静态个人主页网站，部署到 Zeabur。网站首期以信息展示为主，后续会承载个人基本信息、科研成果、项目经历等内容。
+当前目标是设计并实现一个静态个人主页网站，部署到 Cloudflare Pages。网站首期以信息展示为主，后续会承载个人基本信息、科研成果、项目经历等内容。
 
 本阶段已经完成技术选型讨论，并基于 `coderxiaoluo` 的 GitHub 个人主页风格制作了第一版静态原型。原型目前保留 GitHub 深色风格布局，包括左侧个人信息区域和右侧 README 展示区域；已按要求移除 Pinned 仓库卡片区域。
 
@@ -13,7 +13,7 @@
 ## 已确认目标
 
 - 网站形态：静态网站。
-- 部署平台：Zeabur。
+- 部署平台：Cloudflare Pages。
 - 首期内容方向：基本信息、科研成果、项目经历等，具体展示内容后续再讨论。
 - 视觉参考：GitHub 深色个人主页风格。
 - 创意方向：后续希望加入类似 GitHub 贡献图/仓库可视化的动态元素，可能实现为动态贪吃蛇。
@@ -50,6 +50,8 @@ Astro + TypeScript + React + Tailwind CSS
 - 右侧 README 风格展示区。
 - GitHub dark 风格整体布局。
 - 响应式布局。
+- 宽屏桌面布局已参照目标截图重新调整：页面最大宽度约 `1900px`，左侧资料栏和头像最大宽度约 `440px`，README 区域同步放大标题、徽章、技能图标与横幅，进一步减少大屏两侧的无效留白。
+- `1200px` 以下使用收敛后的双栏尺寸，`900px` 以下继续切换为单栏布局。
 
 已基于 `coderxiaoluo` 的公开 GitHub 资料进行仿制：
 
@@ -96,6 +98,7 @@ npm run build
 - 构建通过。
 - 当前输出目录为 `dist/`。
 - Tailwind 提示当前没有检测到 utility class，原因是页面主要使用了自定义 CSS；暂不影响运行。
+- 2026-06-23：完成宽屏布局比例调整后再次执行构建，本地环境仍因 `node_modules/.vite` 缓存文件删除权限出现 `EPERM`，尚需在释放缓存占用或重启环境后复验；本次报错未指向页面源码。
 
 本地开发地址：
 
@@ -103,33 +106,40 @@ npm run build
 http://localhost:4321
 ```
 
-## Zeabur 部署方案
+## Cloudflare Pages 部署方案
 
 推荐部署方式：
 
-- 使用 GitHub 仓库连接 Zeabur。
-- 每次 push 到指定分支后，Zeabur 自动构建和部署。
+- 使用 GitHub 仓库连接 Cloudflare Pages。
+- 每次 push 到生产分支后，由 Cloudflare Pages 自动构建和部署；其他分支和 Pull Request 可生成预览部署。
 - 当前项目是 Astro 静态站，构建命令为 `npm run build`。
 - Astro 默认构建输出目录为 `dist/`。
-- 已添加 `zbpack.json`，通过 `output_dir: dist` 明确告诉 Zeabur 使用 `dist/` 作为静态网页托管目录。
-- Zeabur 会使用 Caddy 托管静态网页。
+- 当前网站不需要服务端渲染，因此不需要安装 Cloudflare Adapter 或编写 Workers 代码。
+- Cloudflare Pages 直接托管 `dist/` 中的静态文件，并提供 HTTPS、CDN 和预览部署。
 
 部署前需要确认：
 
 - 代码已经推送到 GitHub 仓库。
-- 仓库根目录包含 `package.json`、`astro.config.mjs`、`zbpack.json`。
+- 仓库根目录包含 `package.json`、`package-lock.json` 和 `astro.config.mjs`。
 - 不要提交 `node_modules/` 和 `dist/`，它们已写入 `.gitignore`。
+- 在 Cloudflare Pages 中设置构建命令为 `npm run build`，构建输出目录为 `dist`。
+- 根目录保持为仓库根目录；如未来改为 monorepo，再单独调整 Root directory。
 
-Zeabur 控制台部署流程：
+Cloudflare 控制台部署流程：
 
-1. 登录 Zeabur。
-2. 创建 Project。
-3. 点击 Deploy New Service。
-4. 选择 GitHub。
-5. 授权并选择当前个人主页仓库。
-6. 选择部署分支。
-7. 等待 Zeabur 自动识别 Node/Astro 项目并执行构建。
-8. 构建完成后，在 Domain 中生成 `.zeabur.app` 域名或绑定自定义域名。
+1. 登录 Cloudflare Dashboard，进入 Workers & Pages。
+2. 创建 Pages 应用并连接 GitHub 仓库。
+3. 选择当前个人主页仓库和生产分支。
+4. 框架预设选择 Astro；如需手动填写，构建命令使用 `npm run build`，输出目录使用 `dist`。
+5. 保存并部署，等待依赖安装、构建和静态文件发布完成。
+6. 使用 Cloudflare 分配的 `*.pages.dev` 地址访问网站。
+7. 如需自定义域名，在项目的 Custom domains 中添加并按提示配置 DNS。
+
+迁移记录：
+
+- 2026-06-23：部署目标由 Zeabur 改为 Cloudflare Pages。
+- 已删除 Zeabur 专用的 `zbpack.json`，Cloudflare Pages 的构建设置在控制台中配置。
+- 迁移后执行 `npm run build` 时，本地 Windows 环境因 `node_modules/.vite` 缓存文件被锁定而出现 `EPERM`；该问题与 Cloudflare 配置无关，释放文件占用或重启终端后需再次验证构建。
 
 ## 候选方案记录
 
@@ -154,10 +164,11 @@ Zeabur 控制台部署流程：
 - 动态贪吃蛇模块的具体表现形式、数据来源、动画方式和性能方案。
 - 科研成果、项目经历、论文、博客等内容的数据结构。
 - 是否需要博客、CMS、搜索、评论、多语言、访问统计、RSS、sitemap。
-- Zeabur 部署流程与构建配置。
+- Cloudflare Pages 部署流程、自定义域名与构建配置。
 
 ## 待办
 
+- 将当前通过 `img.shields.io`、`skillicons.dev` 和 jsDelivr CDN 引用的徽章、技能图标、技术图标及横幅等静态资源下载并迁移到 `public/images/`，改用本地路径，降低第三方服务异常或网络波动造成的图片加载失败风险。
 - 替换 `coderxiaoluo` 的公开资料为用户自己的真实资料。
 - 明确个人主页的核心目标与目标访客。
 - 明确维护优先级：长期易维护，还是视觉表现优先。

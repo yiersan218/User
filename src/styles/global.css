@@ -47,14 +47,14 @@ button {
 }
 
 .page-shell {
-  width: min(100%, 1280px);
+  width: min(100%, 1900px);
   margin: 0 auto;
-  padding: 28px 24px 56px;
+  padding: 32px 28px 64px;
 }
 
 .profile-grid {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(380px, 440px) minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
@@ -66,7 +66,7 @@ button {
 
 .avatar-wrap {
   position: relative;
-  width: min(100%, 296px);
+  width: min(100%, 440px);
   aspect-ratio: 1;
 }
 
@@ -84,19 +84,19 @@ button {
   right: 6%;
   bottom: 14%;
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 50%;
   background: var(--bg);
   color: #ffa657;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .profile-name {
-  margin: 20px 0 0;
-  font-size: 28px;
+  margin: 24px 0 0;
+  font-size: 32px;
   line-height: 1.25;
   font-weight: 700;
 }
@@ -104,14 +104,14 @@ button {
 .profile-handle {
   margin: 0;
   color: var(--muted);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 300;
 }
 
 .follow-button {
   width: 100%;
   margin: 18px 0 18px;
-  padding: 8px 14px;
+  padding: 10px 16px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: #21262d;
@@ -128,7 +128,7 @@ button {
 .bio {
   margin: 0 0 18px;
   color: var(--text);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.55;
 }
 
@@ -139,6 +139,7 @@ button {
   padding: 0 0 20px;
   color: var(--muted);
   list-style: none;
+  font-size: 16px;
 }
 
 .meta-list strong {
@@ -175,30 +176,30 @@ button {
 }
 
 .readme-card {
-  padding: 28px 32px 32px;
+  padding: 32px 32px 36px;
 }
 
 .readme-kicker {
-  margin: 0 0 26px;
+  margin: 0 0 30px;
   font-family:
     ui-monospace, SFMono-Regular, SFMono, Consolas, "Liberation Mono", Menlo,
     monospace;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .typing-title {
   display: flex;
   justify-content: center;
-  margin: 0 0 28px;
-  padding-bottom: 28px;
+  margin: 0 0 30px;
+  padding-bottom: 30px;
   border-bottom: 1px solid var(--border);
 }
 
 .typing-title img {
   display: block;
-  width: min(100%, 560px);
-  min-height: 40px;
+  width: min(100%, 720px);
+  min-height: 52px;
   object-fit: contain;
 }
 
@@ -206,9 +207,9 @@ button {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 6px;
-  margin: 0 auto 6px;
-  max-width: 860px;
+  gap: 7px;
+  margin: 0 auto 7px;
+  max-width: 1040px;
 }
 
 .badge-cloud-tight {
@@ -217,19 +218,19 @@ button {
 
 .badge-cloud img {
   display: block;
-  height: 22px;
+  height: 27px;
 }
 
 .skill-icons {
   display: flex;
   justify-content: center;
-  margin: 14px auto 6px;
+  margin: 16px auto 8px;
 }
 
 .skill-icons img {
   display: block;
-  width: min(100%, 660px);
-  min-height: 48px;
+  width: min(100%, 940px);
+  min-height: 64px;
   object-fit: contain;
 }
 
@@ -237,14 +238,14 @@ button {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 22px;
-  margin: 8px auto 16px;
+  gap: 24px;
+  margin: 10px auto 18px;
 }
 
 .center-icons img {
   display: block;
-  width: 76px;
-  height: 76px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
 }
 
@@ -256,8 +257,35 @@ button {
 .readme-banner img {
   display: block;
   width: 100%;
-  min-height: 112px;
+  min-height: 150px;
   object-fit: cover;
+}
+
+@media (max-width: 1200px) {
+  .page-shell {
+    max-width: 1160px;
+  }
+
+  .profile-grid {
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+  }
+
+  .avatar-wrap {
+    width: min(100%, 296px);
+  }
+
+  .badge-cloud img {
+    height: 22px;
+  }
+
+  .center-icons {
+    gap: 18px;
+  }
+
+  .center-icons img {
+    width: 72px;
+    height: 72px;
+  }
 }
 
 .floating-cube {
