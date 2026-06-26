@@ -1,2 +1,26 @@
+启动项目：
+
+1. 打开 PowerShell 或命令提示符。
+2. 进入项目目录：
+
+cd D:\Project\User-web
+
+3. 启动本地开发服务器：
+
 npm run dev
+
+4. 浏览器访问：
+
 http://localhost:4321
+
+关闭项目：
+
+在运行 `npm run dev` 的命令行窗口中按：
+
+Ctrl + C
+
+如果命令行询问是否终止批处理作业，输入：
+
+Y
+
+然后按 Enter。

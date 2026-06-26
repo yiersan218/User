@@ -8,42 +8,88 @@ import { ReadmeShowcase } from '../components/ReadmeShowcase';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="coderxiaoluo 的 GitHub 风格个人主页仿制原型。" />
-    <title>不是很菜 | coderxiaoluo</title>
+    <meta name="description" content="壹贰叁218 的 GitHub 风格个人主页原型。" />
+    <title>壹贰叁218|coderxiaoliao</title>
   </head>
   <body>
+    <header class="site-nav">
+      <nav class="site-nav-inner" aria-label="主页目录">
+        <a class="nav-item nav-item-active" href="/" aria-current="page">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M1.75 2.5h4.5A1.75 1.75 0 0 1 8 4.25v9a1.75 1.75 0 0 0-1.75-1.75h-4.5V2.5Zm12.5 0h-4.5A1.75 1.75 0 0 0 8 4.25v9a1.75 1.75 0 0 1 1.75-1.75h4.5V2.5Z" />
+          </svg>
+          <span>个人主页</span>
+        </a>
+
+        <span class="nav-item nav-item-future" role="link" aria-disabled="true" title="后续开放">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M2.25 1.75h8.5A1.25 1.25 0 0 1 12 3v10.5l-2-1.4-2 1.4-2-1.4-2 1.4V3a1.25 1.25 0 0 0-1.25-1.25h-.5Zm0 0A1.25 1.25 0 0 0 1 3v8.25c0 .69.56 1.25 1.25 1.25H4" />
+          </svg>
+          <span>项目实践</span>
+        </span>
+
+        <span class="nav-item nav-item-future" role="link" aria-disabled="true" title="后续开放">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M6 1.75h4M7 1.75v4.1L3.2 12.1A1.4 1.4 0 0 0 4.4 14.25h7.2a1.4 1.4 0 0 0 1.2-2.15L9 5.85v-4.1M5.1 9.25h5.8" />
+          </svg>
+          <span>科研经历</span>
+        </span>
+
+        <span class="nav-item nav-item-future" role="link" aria-disabled="true" title="后续开放">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 13.75S2 10.2 2 5.75A3 3 0 0 1 7.25 3.8L8 4.7l.75-.9A3 3 0 0 1 14 5.75C14 10.2 8 13.75 8 13.75Z" />
+          </svg>
+          <span>加瓦之路</span>
+        </span>
+
+        <a class="nav-avatar-link" href="/" aria-label="返回个人主页" title="个人主页">
+          <img
+            class="nav-avatar"
+            src="/images/profile-avatar.png"
+            alt="壹贰叁218 的头像"
+          />
+        </a>
+      </nav>
+    </header>
+
     <main class="page-shell">
       <div class="profile-grid">
         <aside class="sidebar" aria-label="Profile sidebar">
           <div class="avatar-wrap">
             <img
               class="avatar"
-              src="https://avatars.githubusercontent.com/u/112073238?v=4"
-              alt="不是很菜的 GitHub 头像"
+              src="/images/profile-avatar.png"
+              alt="壹贰叁218 的 GitHub 头像"
             />
             <div class="status-dot" title="Current status">🍍</div>
           </div>
 
-          <h2 class="profile-name">不是很菜</h2>
-          <p class="profile-handle">coderxiaoluo</p>
-          <button class="follow-button" type="button">Follow</button>
+          <h2 class="profile-name">壹贰叁218</h2>
+          <p class="profile-handle">coderxiaoliao</p>
 
-          <p class="bio">吃饭睡觉敲代码</p>
+          <p class="bio">西安电子科技大学</p>
 
           <ul class="meta-list">
-            <li><strong>3</strong> followers · <strong>2</strong> following</li>
-            <li>⌖ 重庆</li>
-            <li>
-              <a href="https://github.com/coderxiaoluo" target="_blank" rel="noreferrer">
-                github.com/coderxiaoluo
+            <li class="meta-bio">吃饭睡觉敲代码</li>
+            <li>⌖ 四川</li>
+            <li class="social-icons" aria-label="社交链接">
+              <button class="social-icon-button" type="button" data-qr-src="/images/qrcode/qq.jpg" data-qr-title="QQ" aria-label="打开 QQ 二维码" title="QQ">
+                <img src="/images/social/qq.png" alt="" />
+              </button>
+              <button class="social-icon-button social-icon-wechat" type="button" data-qr-src="/images/qrcode/weixin.jpg" data-qr-title="微信" aria-label="打开微信二维码" title="WeChat">
+                <img src="/images/social/wechat.svg" alt="" />
+              </button>
+              <button class="social-icon-button" type="button" data-qr-text="2571423782@qq.com" data-qr-title="邮箱" aria-label="打开邮箱信息" title="Email">
+                <img src="/images/social/email.png" alt="" />
+              </button>
+              <a href="https://github.com/yiersan218" target="_blank" rel="noreferrer" aria-label="GitHub">
+                <img src="/images/social/github.png" alt="" />
               </a>
+              <button class="social-icon-button" type="button" data-qr-src="/images/qrcode/bilibili.jpg" data-qr-title="BiliBili" aria-label="打开 BiliBili 二维码" title="BiliBili">
+                <img src="/images/social/bilibili.png" alt="" />
+              </button>
             </li>
           </ul>
-
-          <div class="sidebar-rule"></div>
-          <a class="report-link" href="https://github.com/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fcoderxiaoluo" target="_blank" rel="noreferrer">
-            Block or report user
-          </a>
         </aside>
 
         <section class="main-stack" aria-label="Main content">
@@ -52,6 +98,86 @@ import { ReadmeShowcase } from '../components/ReadmeShowcase';
       </div>
     </main>
 
-    <div class="floating-cube" aria-hidden="true">3D</div>
+    <div class="qr-modal" data-qr-modal hidden>
+      <div class="qr-modal-backdrop" data-qr-close></div>
+      <section class="qr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+        <button class="qr-modal-close" type="button" data-qr-close aria-label="关闭二维码">×</button>
+        <h2 id="qr-modal-title" class="qr-modal-title">二维码</h2>
+        <img class="qr-modal-image" data-qr-image src="" alt="" />
+        <p class="qr-modal-text" data-qr-text-output hidden></p>
+      </section>
+    </div>
+
+    <script>
+      const qrModal = document.querySelector('[data-qr-modal]');
+      const qrImage = document.querySelector('[data-qr-image]');
+      const qrTextOutput = document.querySelector('[data-qr-text-output]');
+      const qrTitle = document.querySelector('#qr-modal-title');
+      const qrTriggers = document.querySelectorAll('[data-qr-src], [data-qr-text]');
+      const qrCloseButtons = document.querySelectorAll('[data-qr-close]');
+
+      const closeQrModal = () => {
+        if (
+          !(qrModal instanceof HTMLElement) ||
+          !(qrImage instanceof HTMLImageElement) ||
+          !(qrTextOutput instanceof HTMLElement)
+        ) {
+          return;
+        }
+        qrModal.hidden = true;
+        qrImage.removeAttribute('src');
+        qrImage.hidden = false;
+        qrTextOutput.hidden = true;
+        qrTextOutput.textContent = '';
+        document.body.classList.remove('modal-open');
+      };
+
+      qrTriggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          if (
+            !(qrModal instanceof HTMLElement) ||
+            !(qrImage instanceof HTMLImageElement) ||
+            !(qrTextOutput instanceof HTMLElement) ||
+            !(qrTitle instanceof HTMLElement) ||
+            !(trigger instanceof HTMLElement)
+          ) {
+            return;
+          }
+
+          const src = trigger.dataset.qrSrc;
+          const text = trigger.dataset.qrText;
+          const title = trigger.dataset.qrTitle ?? '二维码';
+          if (!src && !text) return;
+
+          if (src) {
+            qrImage.src = src;
+            qrImage.alt = `${title} 二维码`;
+            qrImage.hidden = false;
+            qrTextOutput.hidden = true;
+            qrTextOutput.textContent = '';
+            qrTitle.textContent = `${title} 二维码`;
+          } else if (text) {
+            qrImage.removeAttribute('src');
+            qrImage.hidden = true;
+            qrTextOutput.textContent = text;
+            qrTextOutput.hidden = false;
+            qrTitle.textContent = title;
+          }
+
+          qrModal.hidden = false;
+          document.body.classList.add('modal-open');
+        });
+      });
+
+      qrCloseButtons.forEach((button) => {
+        button.addEventListener('click', closeQrModal);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeQrModal();
+        }
+      });
+    </script>
   </body>
 </html>
