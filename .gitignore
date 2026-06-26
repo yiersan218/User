@@ -8,3 +8,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.idea/
+log.txt
+/开发记录日志.md
