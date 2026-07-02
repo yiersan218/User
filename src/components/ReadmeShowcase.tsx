@@ -28,12 +28,12 @@ const iconBanner = '/images/technology-banner.png';
 export function ReadmeShowcase() {
   return (
     <section className="readme-card" aria-label="Profile README preview">
-      <a className="typing-title" href="https://www.yuque.com/coderxiaoluo" target="_blank" rel="noreferrer">
+      <div className="typing-title">
         <img
           src="/images/typing-title.svg"
           alt="灏忓粬鍚屽绁濇偍浠婂ぉ鎰夊揩"
         />
-      </a>
+      </div>
 
       <div className="badge-cloud" aria-label="Frontend technology badges">
         {frontendBadges.map((src) => (
@@ -54,7 +54,7 @@ export function ReadmeShowcase() {
       <section className="self-intro" aria-label="Self introduction">
         <p className="self-intro-greeting">你好鸭，我是廖栩锐 👋</p>
         <p>
-          本科毕业于西安电子科技大学，目前继续在西安电子科技大学攻读研究生 🎓。
+          本科毕业于西安电子科技大学，目前继续在西安电子科技大学攻读硕士研究生 🎓。
           我的研究方向主要是不完备多视图学习和联邦学习，努力让模型在信息不齐和数据分散的现实里都能稳住场面 🔬。
         </p>
         <p>

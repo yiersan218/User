@@ -149,6 +149,10 @@
         'skill-icons',
         'meta-list',
         'social-icons',
+        'projects-shell',
+        'projects-grid',
+        'projects-hero',
+        'project-actions',
       ]);
 
       document.body.querySelectorAll('*').forEach((element) => {
@@ -284,6 +288,10 @@
 
       this.ctx.clearRect(0, 0, width, height);
       this.ctx.lineWidth = 1;
+
+      if (!this.foodSquare || this.isSquareBlocked(this.foodSquare)) {
+        this.createFoodSquare();
+      }
 
       if (this.foodSquare) {
         this.drawSquare(this.foodSquare, this.options.foodColor, true);

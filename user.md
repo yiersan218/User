@@ -39,6 +39,7 @@ Astro + TypeScript + React + Tailwind CSS
 - 首期默认不做动态后端。
 - 若后续出现评论系统、登录、数据库、后台管理、复杂交互、多语言内容管理等需求，需要重新评估当前技术栈是否仍然合适。
 - 如果功能变化导致当前方案不再合适，需要及时提出更优技术选型。
+- 每次开发新主页或新增页面时，都必须检查动态贪吃蛇背景中的绿色“食物”方块是否会与当前页面可见元素重合；若存在重合风险，需要优先调整避让逻辑或页面布局，保证绿色方块只出现在可用空白网格区域。
 
 ## 当前已实现
 
@@ -48,13 +49,20 @@ Astro + TypeScript + React + Tailwind CSS
 
 - 页面顶部的 GitHub 风格横向目录导航，顺序为“个人主页、项目实践、科研经历、加瓦之路”；桌面端导航字体为 `20px`，移动端为 `15px`。
 - 导航内容增加少量顶部空间，使标签整体略微下移；导航栏最右侧显示圆形 mini 头像，复用当前个人资料头像并链接回个人主页。头像上下留白保持视觉对称，桌面端尺寸为 `52px` 并向上微调 `4px`，移动端尺寸为 `42px` 并向上微调 `3px`。
-- “个人主页”为当前激活项并链接到 `/`；其余三个栏目现阶段仅作为禁用的预留入口，不创建对应内容页，避免产生空页面或 404，后续开发页面时再启用跳转。
+- “个人主页”链接到 `/`；“项目实践”链接到 `/projects`，“科研经历”链接到 `/research`，“加瓦之路”链接到 `/java-road`，导航会根据当前页面显示激活状态。
 - 左侧个人资料栏。
 - 右侧 README 风格展示区。
 - README 展示区当前使用后端/AI 技术栈静态徽章：Java、Python、PyTorch、MySQL、PostgreSQL、Elasticsearch、Redis、MongoDB、Spring Boot、MyBatis、RocketMQ、Kafka、Agent、Docker、Maven、GitHub、Steam；徽章均下载到 `public/images/` 并通过本地路径引用。
-- README 展示区已在技术 banner 图片上方新增自我介绍区。当前文案基于用户提供的真实信息：姓名廖栩锐，本科毕业于西安电子科技大学，目前继续在西安电子科技大学攻读研究生；研究方向为不完备多视图学习和联邦学习；已在 CCF-A 类会议 ICLR 发表论文；科研之外持续关注后端开发、数据处理和 AI 相关技术。文案保留少量表情，整体保持轻松但适合个人主页展示。
+- README 展示区已在技术 banner 图片上方新增自我介绍区。当前文案基于用户提供的真实信息：姓名廖栩锐，本科毕业于西安电子科技大学，目前继续在西安电子科技大学攻读硕士研究生；研究方向为不完备多视图学习和联邦学习；已在 CCF-A 类会议 ICLR 发表论文；科研之外持续关注后端开发、数据处理和 AI 相关技术。文案保留少量表情，整体保持轻松但适合个人主页展示。
 - 自我介绍区使用 `.self-intro` 相关样式，以分隔线、正文宽度和响应式字号承接 README 内容；技术 banner 区域通过顶部间距与自我介绍区保持层次。
-- 主页背景已参考 `C:\Users\29101\Downloads\HomePage-master\HomePage-master` 中 `src/js/main.js` 的 `GridAnimation` 思路，扩展为当前项目的独立 Astro 组件 `src/components/SnakeGridBackground.astro`：使用 Canvas 绘制 GitHub dark 风格移动网格，鼠标/触摸移动时生成类似贪吃蛇的蛇身轨迹，蛇身初始长度为 5 格；每次碰撞绿色“食物”方块后蛇身长度增加 1 格，食物方块颜色为高对比亮绿色 `rgba(111, 239, 124, 0.96)`；食物生成会避开当前可见 DOM 元素，并在滚动、图片加载和后续 DOM 变化后重新检查，避免与现有或新增页面元素重合。
+- 主页、项目实践页、科研经历页和加瓦之路页共用 `src/components/SnakeGridBackground.astro`：使用 Canvas 绘制 GitHub dark 风格移动网格，并重新启用动态贪吃蛇效果；鼠标/触摸移动时生成蛇身拖尾，蛇头为白色高亮方格，随机绿色“食物”方块会避开当前可见 DOM 元素，碰撞后蛇身长度增加。由于背景网格会持续移动，绿色方块在每一帧绘制前都会复查是否与当前页面元素重合，若重合则立即重新生成到可用格子。
+- 项目实践、科研经历和加瓦之路页面均复用 `src/components/ProjectCard.astro` 的卡片渲染逻辑，具体数据先使用占位内容，后续可替换为真实项目截图、链接和技术栈。
+- 项目实践页 `src/pages/projects.astro`：点击导航中的“项目实践”跳转到 `/projects`；后续规划展示 4 个项目，桌面端 4 个长条形项目卡片显示为一排。
+- 科研经历页 `src/pages/research.astro`：点击导航中的“科研经历”跳转到 `/research`；后续规划展示 3 个科研项目，桌面端 3 个长条形项目卡片显示为一排。
+- 加瓦之路页 `src/pages/java-road.astro`：点击导航中的“加瓦之路”跳转到 `/java-road`；布局基于当前项目卡片视觉，桌面端每行显示 5 个紧凑卡片。
+- 项目实践、科研经历和加瓦之路页面的卡片模块之间需要保持略宽松的间距，避免一排展示时显得拥挤；当前普通项目网格间距为 `22px`，长条卡片网格间距为 `24px`。
+- 项目实践、科研经历和加瓦之路页面的卡片模块需要与顶部标题保持清晰的垂直间距；当前桌面端标题与模块网格之间通过 `24px` 顶部间距拉开，移动端收敛为 `18px`。
+- 网页 favicon 已根据用户提供的粉色小图标风格重新设计为透明背景矢量 `public/favicon.svg`，统一通过 `src/components/FaviconLinks.astro` 在各页面 `<head>` 中引用；由于图形较简单，优先使用 SVG 保证浏览器标签页在 16px、32px 等尺寸下仍保持清晰。
 - GitHub dark 风格整体布局。
 - 响应式布局。
 - 宽屏桌面布局已参照目标截图重新调整：页面最大宽度约 `1900px`，左侧资料栏和头像最大宽度约 `440px`，README 区域同步放大标题、徽章、技能图标与横幅，进一步减少大屏两侧的无效留白。
@@ -64,8 +72,16 @@ Astro + TypeScript + React + Tailwind CSS
 
 主要文件：
 
-- `src/pages/index.astro`：页面主体结构。
+- `src/pages/index.astro`：个人主页主体结构。
+- `src/pages/projects.astro`：项目实践展示页。
+- `src/pages/research.astro`：科研经历展示页。
+- `src/pages/java-road.astro`：加瓦之路展示页。
 - `src/components/ReadmeShowcase.tsx`：README 展示区。
+- `src/components/SiteNav.astro`：顶部导航组件，负责主页和项目页跳转及激活状态。
+- `src/components/ProjectCard.astro`：项目、科研和加瓦之路页面共用的卡片组件。
+- `src/components/FaviconLinks.astro`：统一输出 favicon 与 theme color 的 `<head>` 标签。
+- `src/components/SnakeGridBackground.astro`：Canvas 移动网格背景组件。
+- `public/favicon.svg`：网页标签页图标，采用粉色小图标风格的矢量实现。
 - `src/styles/global.css`：全局样式和 GitHub dark 风格布局。
 - `public/images/`：本地图片资源，包括头像、技术徽章、技能图标、中心技术图标、社交图标与二维码图片。
 - `package.json`：项目依赖与脚本。

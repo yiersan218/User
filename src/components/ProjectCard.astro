@@ -1,0 +1,143 @@
+---
+export interface ProjectItem {
+  title: string;
+  date: string;
+  description: string;
+  cover: 'dashboard' | 'terminal' | 'chart' | 'gallery' | 'profile' | 'paper' | 'code' | 'timeline';
+  links: string[];
+}
+
+interface Props {
+  item: ProjectItem;
+  variant?: 'standard' | 'strip' | 'tile';
+}
+
+const { item, variant = 'standard' } = Astro.props;
+---
+
+<article class:list={['project-card', `project-card-${variant}`]}>
+  <div class:list={['project-cover', `project-cover-${item.cover}`]} aria-hidden="true">
+    <div class="cover-window">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    {item.cover === 'dashboard' && (
+      <div class="cover-dashboard">
+        <div class="cover-sidebar"></div>
+        <div class="cover-main">
+          <div class="cover-line cover-line-wide"></div>
+          <div class="cover-line"></div>
+          <div class="cover-metrics">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="cover-table">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {item.cover === 'terminal' && (
+      <div class="cover-terminal">
+        <div>
+          <span>$ pnpm agent:run</span>
+          <span>planning scene graph...</span>
+          <span>render queue ready</span>
+          <span>export result.mp4</span>
+        </div>
+        <div class="cover-preview"></div>
+      </div>
+    )}
+
+    {item.cover === 'chart' && (
+      <div class="cover-chart">
+        <div class="cover-score">
+          <span style="--w: 92%"></span>
+          <span style="--w: 78%"></span>
+          <span style="--w: 64%"></span>
+        </div>
+        <div class="cover-logo">AI</div>
+      </div>
+    )}
+
+    {item.cover === 'gallery' && (
+      <div class="cover-gallery">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    )}
+
+    {item.cover === 'profile' && (
+      <div class="cover-profile">
+        <img src="/images/profile-avatar.png" alt="" />
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    )}
+
+    {item.cover === 'paper' && (
+      <div class="cover-paper">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    )}
+
+    {item.cover === 'code' && (
+      <div class="cover-code">
+        <span>public class Main &#123;</span>
+        <span>  service.start();</span>
+        <span>  cache.refresh();</span>
+        <span>  return Result.ok();</span>
+        <span>&#125;</span>
+      </div>
+    )}
+
+    {item.cover === 'timeline' && (
+      <div class="cover-timeline">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    )}
+  </div>
+
+  <div class="project-content">
+    <h2>{item.title}</h2>
+    <p class="project-date">{item.date}</p>
+    <p class="project-description">{item.description}</p>
+    <div class="project-actions">
+      {item.links.map((link) => (
+        <a href="#" aria-label={`${item.title} ${link}`}>
+          {link === 'GitHub' && (
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 1.25a6.75 6.75 0 0 0-2.13 13.16c.34.06.46-.15.46-.33v-1.25c-1.9.41-2.3-.82-2.3-.82-.31-.78-.76-.99-.76-.99-.62-.42.05-.42.05-.42.69.05 1.05.71 1.05.71.61 1.04 1.6.74 1.99.57.06-.44.24-.74.43-.91-1.52-.17-3.12-.76-3.12-3.38 0-.75.27-1.36.71-1.84-.07-.17-.31-.87.07-1.82 0 0 .58-.19 1.89.7A6.6 6.6 0 0 1 8 4.1c.57 0 1.15.08 1.69.23 1.31-.89 1.89-.7 1.89-.7.38.95.14 1.65.07 1.82.44.48.71 1.09.71 1.84 0 2.63-1.6 3.21-3.13 3.38.25.21.47.63.47 1.27v2.14c0 .18.12.39.47.33A6.75 6.75 0 0 0 8 1.25Z" />
+            </svg>
+          )}
+          {link !== 'GitHub' && (
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M4.75 2.25h4.6L12.75 5.6v8.15h-8V2.25Zm4.5.25v3.2h3.25M6.5 8.25h4M6.5 10.5h4M6.5 12.75h2.2" />
+            </svg>
+          )}
+          <span>{link}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</article>

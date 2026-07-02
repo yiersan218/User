@@ -1,0 +1,107 @@
+---
+import '../styles/global.css';
+import FaviconLinks from '../components/FaviconLinks.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SnakeGridBackground from '../components/SnakeGridBackground.astro';
+import SiteNav from '../components/SiteNav.astro';
+
+const javaRoadItems = [
+  {
+    title: 'Java 基础',
+    date: '阶段 01',
+    description: '语法、集合、异常、泛型和常用 API 的系统复盘。',
+    cover: 'code',
+    links: ['Notes'],
+  },
+  {
+    title: 'JVM 与并发',
+    date: '阶段 02',
+    description: '类加载、内存模型、垃圾回收和线程协作机制。',
+    cover: 'timeline',
+    links: ['Notes'],
+  },
+  {
+    title: 'Spring Boot',
+    date: '阶段 03',
+    description: 'Web 服务、配置管理、参数校验和统一异常处理。',
+    cover: 'dashboard',
+    links: ['Code'],
+  },
+  {
+    title: 'MyBatis',
+    date: '阶段 04',
+    description: 'SQL 映射、动态查询、分页和事务边界。',
+    cover: 'paper',
+    links: ['Code'],
+  },
+  {
+    title: 'Redis 缓存',
+    date: '阶段 05',
+    description: '缓存策略、分布式锁、热点数据和过期策略。',
+    cover: 'chart',
+    links: ['Notes'],
+  },
+  {
+    title: '消息队列',
+    date: '阶段 06',
+    description: 'RocketMQ/Kafka 的削峰、异步解耦与可靠投递。',
+    cover: 'terminal',
+    links: ['Notes'],
+  },
+  {
+    title: '搜索服务',
+    date: '阶段 07',
+    description: 'Elasticsearch 索引设计、检索排序和同步链路。',
+    cover: 'dashboard',
+    links: ['Code'],
+  },
+  {
+    title: 'Docker 部署',
+    date: '阶段 08',
+    description: '镜像构建、容器编排、环境变量和日志采集。',
+    cover: 'code',
+    links: ['Docs'],
+  },
+  {
+    title: '性能压测',
+    date: '阶段 09',
+    description: '接口压测、瓶颈定位、线程池和数据库调优。',
+    cover: 'chart',
+    links: ['Blog'],
+  },
+  {
+    title: '项目复盘',
+    date: '阶段 10',
+    description: '整理需求拆解、技术选型、问题记录和交付复盘。',
+    cover: 'profile',
+    links: ['Blog'],
+  },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="壹贰叁218 的加瓦之路展示页。" />
+    <FaviconLinks />
+    <title>加瓦之路 | coderxiaoliao</title>
+  </head>
+  <body>
+    <SnakeGridBackground />
+    <SiteNav active="javaRoad" />
+
+    <main class="projects-shell java-road-shell">
+      <header class="projects-hero">
+        <h1>记录我的加瓦之路</h1>
+      </header>
+
+      <section class="projects-grid java-road-grid" aria-label="加瓦之路列表">
+        {javaRoadItems.map((item) => (
+          <ProjectCard item={item} variant="tile" />
+        ))}
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import FaviconLinks from '../components/FaviconLinks.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SnakeGridBackground from '../components/SnakeGridBackground.astro';
+import SiteNav from '../components/SiteNav.astro';
+
+const projects = [
+  {
+    title: '大语言模型推理服务平台',
+    date: '2026年3月 - 至今',
+    description: '基于 SGLang 的推理框架与服务平台，围绕吞吐、成本和稳定性搭建大模型推理服务。',
+    cover: 'dashboard',
+    links: ['GitHub', 'Demo'],
+  },
+  {
+    title: 'Video-Ocean Video Agent',
+    date: '2025年6月 - 2026年1月',
+    description: '面向长视频生成任务的智能体原型，支持脚本拆解、镜头规划和多阶段生成流程。',
+    cover: 'terminal',
+    links: ['GitHub', 'Docs'],
+  },
+  {
+    title: 'Open-Sora 复现记录',
+    date: '2024年3月 - 2025年3月',
+    description: '围绕开源 Sora 类视频生成模型的训练、推理和工程化复现进行系统记录。',
+    cover: 'chart',
+    links: ['GitHub', 'Blog'],
+  },
+  {
+    title: '个人主页模板',
+    date: '2025年10月',
+    description: '当前网站的静态主页模板，使用 Astro、React 和 Tailwind CSS 构建并部署到 Cloudflare Pages。',
+    cover: 'profile',
+    links: ['GitHub', 'Docs'],
+  },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="壹贰叁218 的项目实践展示页。" />
+    <FaviconLinks />
+    <title>项目实践 | coderxiaoliao</title>
+  </head>
+  <body>
+    <SnakeGridBackground />
+    <SiteNav active="projects" />
+
+    <main class="projects-shell projects-shell-wide">
+      <header class="projects-hero">
+        <h1>查看我的项目实践</h1>
+      </header>
+
+      <section class="projects-grid projects-grid-strip projects-grid-four" aria-label="项目实践列表">
+        {projects.map((project) => (
+          <ProjectCard item={project} variant="strip" />
+        ))}
+      </section>
+    </main>
+  </body>
+</html>

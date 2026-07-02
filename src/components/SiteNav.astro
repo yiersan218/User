@@ -1,0 +1,51 @@
+---
+interface Props {
+  active?: 'home' | 'projects' | 'research' | 'javaRoad';
+}
+
+const { active = 'home' } = Astro.props;
+const homeActive = active === 'home';
+const projectsActive = active === 'projects';
+const researchActive = active === 'research';
+const javaRoadActive = active === 'javaRoad';
+---
+
+<header class="site-nav">
+  <nav class="site-nav-inner" aria-label="主页目录">
+    <a class:list={['nav-item', { 'nav-item-active': homeActive }]} href="/" aria-current={homeActive ? 'page' : undefined}>
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M1.75 2.5h4.5A1.75 1.75 0 0 1 8 4.25v9a1.75 1.75 0 0 0-1.75-1.75h-4.5V2.5Zm12.5 0h-4.5A1.75 1.75 0 0 0 8 4.25v9a1.75 1.75 0 0 1 1.75-1.75h4.5V2.5Z" />
+      </svg>
+      <span>个人主页</span>
+    </a>
+
+    <a class:list={['nav-item', { 'nav-item-active': projectsActive }]} href="/projects" aria-current={projectsActive ? 'page' : undefined}>
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2.25 1.75h8.5A1.25 1.25 0 0 1 12 3v10.5l-2-1.4-2 1.4-2-1.4-2 1.4V3a1.25 1.25 0 0 0-1.25-1.25h-.5Zm0 0A1.25 1.25 0 0 0 1 3v8.25c0 .69.56 1.25 1.25 1.25H4" />
+      </svg>
+      <span>项目实践</span>
+    </a>
+
+    <a class:list={['nav-item', { 'nav-item-active': researchActive }]} href="/research" aria-current={researchActive ? 'page' : undefined}>
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M6 1.75h4M7 1.75v4.1L3.2 12.1A1.4 1.4 0 0 0 4.4 14.25h7.2a1.4 1.4 0 0 0 1.2-2.15L9 5.85v-4.1M5.1 9.25h5.8" />
+      </svg>
+      <span>科研经历</span>
+    </a>
+
+    <a class:list={['nav-item', { 'nav-item-active': javaRoadActive }]} href="/java-road" aria-current={javaRoadActive ? 'page' : undefined}>
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M8 13.75S2 10.2 2 5.75A3 3 0 0 1 7.25 3.8L8 4.7l.75-.9A3 3 0 0 1 14 5.75C14 10.2 8 13.75 8 13.75Z" />
+      </svg>
+      <span>加瓦之路</span>
+    </a>
+
+    <a class="nav-avatar-link" href="/" aria-label="返回个人主页" title="个人主页">
+      <img
+        class="nav-avatar"
+        src="/images/profile-avatar.png"
+        alt="壹贰叁218 的头像"
+      />
+    </a>
+  </nav>
+</header>

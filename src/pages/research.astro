@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+import FaviconLinks from '../components/FaviconLinks.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SnakeGridBackground from '../components/SnakeGridBackground.astro';
+import SiteNav from '../components/SiteNav.astro';
+
+const researchItems = [
+  {
+    title: '不完备多视图学习',
+    date: '2024年9月 - 至今',
+    description: '围绕缺失视图场景下的鲁棒表征学习展开研究，关注跨视图对齐、补全和分类性能提升。',
+    cover: 'paper',
+    links: ['Paper', 'Code'],
+  },
+  {
+    title: '联邦学习与隐私计算',
+    date: '2024年3月 - 至今',
+    description: '探索数据分散场景下的协同建模方法，关注通信效率、客户端异质性和模型泛化能力。',
+    cover: 'timeline',
+    links: ['Notes', 'Code'],
+  },
+  {
+    title: 'ICLR 论文工作流',
+    date: '2025年1月',
+    description: '整理从实验设计、消融分析到论文撰写的科研流程，后续可替换为真实论文摘要与链接。',
+    cover: 'chart',
+    links: ['Paper', 'Blog'],
+  },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="壹贰叁218 的科研经历展示页。" />
+    <FaviconLinks />
+    <title>科研经历 | coderxiaoliao</title>
+  </head>
+  <body>
+    <SnakeGridBackground />
+    <SiteNav active="research" />
+
+    <main class="projects-shell projects-shell-wide">
+      <header class="projects-hero">
+        <h1>整理我的科研经历</h1>
+      </header>
+
+      <section class="projects-grid projects-grid-strip projects-grid-three" aria-label="科研经历列表">
+        {researchItems.map((item) => (
+          <ProjectCard item={item} variant="strip" />
+        ))}
+      </section>
+    </main>
+  </body>
+</html>
