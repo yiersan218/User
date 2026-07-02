@@ -1,0 +1,352 @@
+<canvas class="snake-grid-background" aria-hidden="true" data-snake-grid></canvas>
+
+<script>
+  class SnakeGridBackground {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d');
+      this.options = {
+        direction: 'diagonal',
+        speed: 0.08,
+        squareSize: 44,
+        borderColor: 'rgba(139, 148, 158, 0.12)',
+        headColor: 'rgba(230, 237, 243, 0.78)',
+        bodyColor: 'rgba(88, 166, 255, 0.24)',
+        glowColor: 'rgba(47, 129, 247, 0.34)',
+        foodColor: 'rgba(111, 239, 124, 0.96)',
+        fadeColor: 'rgba(13, 17, 23, 0.82)',
+        foodGrowth: 1,
+        foodAvoidancePadding: 14,
+        maxSnakeLength: 5,
+      };
+      this.gridOffset = { x: 0, y: 0 };
+      this.hoveredSquare = null;
+      this.snakeBody = [];
+      this.foodSquare = null;
+      this.lastTimestamp = 0;
+      this.animationFrame = null;
+      this.foodRefreshFrame = null;
+      this.mutationObserver = null;
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      this.handleResize = this.resizeCanvas.bind(this);
+      this.handleFoodRefresh = this.scheduleFoodRefresh.bind(this);
+      this.handlePointerMove = this.onPointerMove.bind(this);
+      this.handlePointerLeave = this.onPointerLeave.bind(this);
+      this.handleVisibilityChange = this.onVisibilityChange.bind(this);
+    }
+
+    init() {
+      this.tuneForViewport();
+      this.resizeCanvas();
+      this.createFoodSquare();
+      window.addEventListener('resize', this.handleResize);
+      window.addEventListener('scroll', this.handleFoodRefresh, { passive: true });
+      window.addEventListener('load', this.handleFoodRefresh, { once: true });
+      window.addEventListener('pointermove', this.handlePointerMove, { passive: true });
+      document.addEventListener('pointerleave', this.handlePointerLeave);
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+      this.mutationObserver = new MutationObserver(this.handleFoodRefresh);
+      this.mutationObserver.observe(document.body, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+      this.animate();
+    }
+
+    tuneForViewport() {
+      const isSmallViewport = window.innerWidth < 720;
+      this.options.squareSize = isSmallViewport ? 52 : 44;
+      this.options.speed = this.reducedMotion ? 0 : isSmallViewport ? 0.045 : 0.08;
+    }
+
+    resizeCanvas() {
+      this.tuneForViewport();
+      const dpr = window.devicePixelRatio || 1;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      this.canvas.width = Math.floor(width * dpr);
+      this.canvas.height = Math.floor(height * dpr);
+      this.canvas.style.width = `${width}px`;
+      this.canvas.style.height = `${height}px`;
+      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      this.createFoodSquare();
+    }
+
+    getGridStart() {
+      const { squareSize } = this.options;
+      return {
+        x: Math.floor(this.gridOffset.x / squareSize) * squareSize,
+        y: Math.floor(this.gridOffset.y / squareSize) * squareSize,
+      };
+    }
+
+    getSquareFromPoint(x, y) {
+      const { squareSize } = this.options;
+      const start = this.getGridStart();
+      return {
+        x: Math.floor((x + this.gridOffset.x - start.x) / squareSize),
+        y: Math.floor((y + this.gridOffset.y - start.y) / squareSize),
+      };
+    }
+
+    onPointerMove(event) {
+      const nextSquare = this.getSquareFromPoint(event.clientX, event.clientY);
+      if (
+        this.hoveredSquare &&
+        this.hoveredSquare.x === nextSquare.x &&
+        this.hoveredSquare.y === nextSquare.y
+      ) {
+        return;
+      }
+
+      if (this.hoveredSquare) {
+        this.snakeBody.unshift(this.hoveredSquare);
+        this.snakeBody = this.dedupeSnake(this.snakeBody).slice(0, this.options.maxSnakeLength);
+      }
+
+      this.hoveredSquare = nextSquare;
+
+      if (
+        this.foodSquare &&
+        nextSquare.x === this.foodSquare.x &&
+        nextSquare.y === this.foodSquare.y
+      ) {
+        this.options.maxSnakeLength = Math.min(
+          this.options.maxSnakeLength + this.options.foodGrowth,
+          42
+        );
+        this.createFoodSquare();
+      }
+    }
+
+    onPointerLeave() {
+      this.hoveredSquare = null;
+    }
+
+    dedupeSnake(body) {
+      const seen = new Set();
+      return body.filter((segment) => {
+        const key = `${segment.x},${segment.y}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    getBlockedSquares() {
+      const blockedSquares = new Set();
+      const { squareSize, foodAvoidancePadding } = this.options;
+      const start = this.getGridStart();
+      const layoutOnlyClasses = new Set([
+        'page-shell',
+        'profile-grid',
+        'main-stack',
+        'avatar-wrap',
+        'badge-cloud',
+        'badge-cloud-tight',
+        'skill-icons',
+        'meta-list',
+        'social-icons',
+      ]);
+
+      document.body.querySelectorAll('*').forEach((element) => {
+        if (
+          element === this.canvas ||
+          element instanceof HTMLScriptElement ||
+          element instanceof HTMLStyleElement
+        ) {
+          return;
+        }
+
+        if ([...layoutOnlyClasses].some((className) => element.classList.contains(className))) {
+          return;
+        }
+
+        const style = window.getComputedStyle(element);
+        if (
+          style.display === 'none' ||
+          style.visibility === 'hidden' ||
+          style.opacity === '0' ||
+          element.hasAttribute('hidden')
+        ) {
+          return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) {
+          return;
+        }
+
+        const left = Math.max(0, rect.left - foodAvoidancePadding);
+        const top = Math.max(0, rect.top - foodAvoidancePadding);
+        const right = Math.min(window.innerWidth, rect.right + foodAvoidancePadding);
+        const bottom = Math.min(window.innerHeight, rect.bottom + foodAvoidancePadding);
+        const minX = Math.floor((left + this.gridOffset.x - start.x) / squareSize);
+        const maxX = Math.floor((right + this.gridOffset.x - start.x) / squareSize);
+        const minY = Math.floor((top + this.gridOffset.y - start.y) / squareSize);
+        const maxY = Math.floor((bottom + this.gridOffset.y - start.y) / squareSize);
+
+        for (let x = minX; x <= maxX; x += 1) {
+          for (let y = minY; y <= maxY; y += 1) {
+            blockedSquares.add(`${x},${y}`);
+          }
+        }
+      });
+
+      return blockedSquares;
+    }
+
+    isSquareBlocked(square) {
+      if (!square) {
+        return true;
+      }
+
+      const blockedSquares = this.getBlockedSquares();
+      const isSnakeSquare = this.snakeBody.some(
+        (segment) => segment.x === square.x && segment.y === square.y
+      );
+      return isSnakeSquare || blockedSquares.has(`${square.x},${square.y}`);
+    }
+
+    scheduleFoodRefresh() {
+      if (this.foodRefreshFrame) {
+        window.cancelAnimationFrame(this.foodRefreshFrame);
+      }
+
+      this.foodRefreshFrame = window.requestAnimationFrame(() => {
+        this.foodRefreshFrame = null;
+        if (this.isSquareBlocked(this.foodSquare)) {
+          this.createFoodSquare();
+        }
+      });
+    }
+
+    createFoodSquare() {
+      const { squareSize } = this.options;
+      const columns = Math.max(3, Math.ceil(window.innerWidth / squareSize));
+      const rows = Math.max(3, Math.ceil(window.innerHeight / squareSize));
+      const blockedSquares = this.getBlockedSquares();
+      const availableSquares = [];
+
+      for (let x = 1; x < columns - 1; x += 1) {
+        for (let y = 1; y < rows - 1; y += 1) {
+          const isSnakeSquare = this.snakeBody.some(
+            (segment) => segment.x === x && segment.y === y
+          );
+          if (!isSnakeSquare && !blockedSquares.has(`${x},${y}`)) {
+            availableSquares.push({ x, y });
+          }
+        }
+      }
+
+      this.foodSquare =
+        availableSquares.length > 0
+          ? availableSquares[Math.floor(Math.random() * availableSquares.length)]
+          : null;
+    }
+
+    update(timestamp) {
+      const deltaTime = this.lastTimestamp ? timestamp - this.lastTimestamp : 16;
+      this.lastTimestamp = timestamp;
+      const moveAmount = Math.min(deltaTime / 16.67, 2) * this.options.speed;
+      const { direction, squareSize } = this.options;
+
+      if (direction === 'diagonal') {
+        this.gridOffset.x = (this.gridOffset.x - moveAmount + squareSize) % squareSize;
+        this.gridOffset.y = (this.gridOffset.y - moveAmount + squareSize) % squareSize;
+      }
+    }
+
+    drawSquare(segment, color, glow = false) {
+      const { squareSize } = this.options;
+      const start = this.getGridStart();
+      const x = Math.round(segment.x * squareSize + start.x - (this.gridOffset.x % squareSize));
+      const y = Math.round(segment.y * squareSize + start.y - (this.gridOffset.y % squareSize));
+
+      if (glow) {
+        this.ctx.shadowColor = this.options.glowColor;
+        this.ctx.shadowBlur = 18;
+      }
+
+      this.ctx.fillStyle = color;
+      this.ctx.fillRect(x, y, squareSize, squareSize);
+      this.ctx.shadowColor = 'transparent';
+      this.ctx.shadowBlur = 0;
+    }
+
+    drawGrid() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const { squareSize } = this.options;
+      const start = this.getGridStart();
+
+      this.ctx.clearRect(0, 0, width, height);
+      this.ctx.lineWidth = 1;
+
+      if (this.foodSquare) {
+        this.drawSquare(this.foodSquare, this.options.foodColor, true);
+      }
+
+      this.snakeBody.forEach((segment, index) => {
+        const opacity = Math.max(0.08, 0.32 * Math.pow(0.86, index));
+        const color = this.options.bodyColor.replace('0.24', opacity.toFixed(3));
+        this.drawSquare(segment, color, index < 4);
+      });
+
+      if (this.hoveredSquare) {
+        this.drawSquare(this.hoveredSquare, this.options.headColor, true);
+      }
+
+      this.ctx.strokeStyle = this.options.borderColor;
+      for (let x = start.x - (this.gridOffset.x % squareSize); x < width + squareSize; x += squareSize) {
+        for (let y = start.y - (this.gridOffset.y % squareSize); y < height + squareSize; y += squareSize) {
+          this.ctx.strokeRect(Math.round(x), Math.round(y), squareSize, squareSize);
+        }
+      }
+
+      const vignette = this.ctx.createRadialGradient(
+        width / 2,
+        height / 2,
+        0,
+        width / 2,
+        height / 2,
+        Math.hypot(width, height) / 2
+      );
+      vignette.addColorStop(0, 'rgba(13, 17, 23, 0)');
+      vignette.addColorStop(0.72, 'rgba(13, 17, 23, 0.38)');
+      vignette.addColorStop(1, this.options.fadeColor);
+      this.ctx.fillStyle = vignette;
+      this.ctx.fillRect(0, 0, width, height);
+    }
+
+    animate(timestamp = 0) {
+      this.update(timestamp);
+      this.drawGrid();
+      this.animationFrame = window.requestAnimationFrame((nextTimestamp) =>
+        this.animate(nextTimestamp)
+      );
+    }
+
+    onVisibilityChange() {
+      if (document.hidden) {
+        if (this.animationFrame) {
+          window.cancelAnimationFrame(this.animationFrame);
+          this.animationFrame = null;
+        }
+        return;
+      }
+
+      if (!this.animationFrame) {
+        this.lastTimestamp = 0;
+        this.animate();
+      }
+    }
+  }
+
+  const canvas = document.querySelector('[data-snake-grid]');
+  if (canvas instanceof HTMLCanvasElement) {
+    new SnakeGridBackground(canvas).init();
+  }
+</script>

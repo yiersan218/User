@@ -51,6 +51,19 @@ export function ReadmeShowcase() {
         <img src={skillIcons} alt="Animated skill icons" />
       </div>
 
+      <section className="self-intro" aria-label="Self introduction">
+        <p className="self-intro-greeting">你好鸭，我是廖栩锐 👋</p>
+        <p>
+          本科毕业于西安电子科技大学，目前继续在西安电子科技大学攻读研究生 🎓。
+          我的研究方向主要是不完备多视图学习和联邦学习，努力让模型在信息不齐和数据分散的现实里都能稳住场面 🔬。
+        </p>
+        <p>
+          目前已在 CCF-A 类会议 ICLR 发表过一篇论文 📝。科研之外，我也持续关注后端开发、
+          数据处理和 AI 相关技术，喜欢把想法写成代码，把代码跑成结果，再把结果整理成一点点
+          看得懂、用得上、最好还能少踩坑的记录 💻。
+        </p>
+      </section>
+
       <div className="readme-banner" aria-label="Technology banner">
         <img src={iconBanner} alt="Technology logo banner" />
       </div>

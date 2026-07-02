@@ -16,7 +16,7 @@
 - 部署平台：Cloudflare Pages。
 - 首期内容方向：基本信息、科研成果、项目经历等，具体展示内容后续再讨论。
 - 视觉参考：GitHub 深色个人主页风格。
-- 创意方向：后续希望加入类似 GitHub 贡献图/仓库可视化的动态元素，可能实现为动态贪吃蛇。
+- 创意方向：已接入类似 GitHub 贡献图/仓库可视化的动态贪吃蛇背景，后续可继续扩展数据来源或交互表现。
 - 讨论过程中的有效结论需要持续记录到 `user.md`。
 
 ## 技术选型
@@ -31,7 +31,7 @@ Astro + TypeScript + React + Tailwind CSS
 
 - Astro：网站主体框架、页面路由、静态生成、内容组织。
 - TypeScript：类型约束、数据结构校验、提升长期维护可靠性。
-- React：负责局部动态交互组件，例如后续 GitHub 贡献图风格动态贪吃蛇。
+- React：负责局部组件化展示，目前用于 README 展示区；后续如出现更复杂的局部交互，也可继续由 React 承载。
 - Tailwind CSS：负责页面布局、响应式、暗色模式和视觉样式开发。
 
 技术选型规则：
@@ -52,6 +52,9 @@ Astro + TypeScript + React + Tailwind CSS
 - 左侧个人资料栏。
 - 右侧 README 风格展示区。
 - README 展示区当前使用后端/AI 技术栈静态徽章：Java、Python、PyTorch、MySQL、PostgreSQL、Elasticsearch、Redis、MongoDB、Spring Boot、MyBatis、RocketMQ、Kafka、Agent、Docker、Maven、GitHub、Steam；徽章均下载到 `public/images/` 并通过本地路径引用。
+- README 展示区已在技术 banner 图片上方新增自我介绍区。当前文案基于用户提供的真实信息：姓名廖栩锐，本科毕业于西安电子科技大学，目前继续在西安电子科技大学攻读研究生；研究方向为不完备多视图学习和联邦学习；已在 CCF-A 类会议 ICLR 发表论文；科研之外持续关注后端开发、数据处理和 AI 相关技术。文案保留少量表情，整体保持轻松但适合个人主页展示。
+- 自我介绍区使用 `.self-intro` 相关样式，以分隔线、正文宽度和响应式字号承接 README 内容；技术 banner 区域通过顶部间距与自我介绍区保持层次。
+- 主页背景已参考 `C:\Users\29101\Downloads\HomePage-master\HomePage-master` 中 `src/js/main.js` 的 `GridAnimation` 思路，扩展为当前项目的独立 Astro 组件 `src/components/SnakeGridBackground.astro`：使用 Canvas 绘制 GitHub dark 风格移动网格，鼠标/触摸移动时生成类似贪吃蛇的蛇身轨迹，蛇身初始长度为 5 格；每次碰撞绿色“食物”方块后蛇身长度增加 1 格，食物方块颜色为高对比亮绿色 `rgba(111, 239, 124, 0.96)`；食物生成会避开当前可见 DOM 元素，并在滚动、图片加载和后续 DOM 变化后重新检查，避免与现有或新增页面元素重合。
 - GitHub dark 风格整体布局。
 - 响应式布局。
 - 宽屏桌面布局已参照目标截图重新调整：页面最大宽度约 `1900px`，左侧资料栏和头像最大宽度约 `440px`，README 区域同步放大标题、徽章、技能图标与横幅，进一步减少大屏两侧的无效留白。
@@ -73,36 +76,6 @@ Astro + TypeScript + React + Tailwind CSS
 已删除：
 
 - `src/components/RepoCard.tsx`
-
-## 验证记录
-
-已执行构建验证：
-
-```txt
-npm run build
-```
-
-结果：
-
-- 构建通过。
-- 当前输出目录为 `dist/`。
-- Tailwind 提示当前没有检测到 utility class，原因是页面主要使用了自定义 CSS；暂不影响运行。
-- 2026-06-23：完成宽屏布局比例调整后再次执行构建，本地环境仍因 `node_modules/.vite` 缓存文件删除权限出现 `EPERM`，尚需在释放缓存占用或重启环境后复验；本次报错未指向页面源码。
-- 2026-06-25：完成图片资源本地化后执行 `npm run build`。首次在沙箱内构建时，Astro 写入 `.astro/types.d.ts` 出现 `EPERM`；使用提升权限重跑同一构建命令后通过。Tailwind 仍提示未检测到 utility class，原因仍是当前页面主要使用自定义 CSS，暂不影响运行。
-- 2026-06-26：完成社交二维码弹窗、Email 弹窗、GitHub 链接、README 顶部文字删除和 typing 标题文案调整后，使用提升权限执行 `npm run build`，构建通过。
-- 2026-06-26：按用户提供的 Shields.io 链接替换 README 展示区静态技术徽章后，使用提升权限执行 `npm run build`，构建通过。
-- 2026-06-26：使用 Agent 徽章替换 Linux 徽章，并将 Agent 徽章移动到 Docker 前方后，使用提升权限执行 `npm run build`，构建通过。
-- 2026-06-26：在静态技术徽章末尾追加 GitHub 和 Steam 徽章后，使用提升权限执行 `npm run build`，构建通过。
-
-- 2026-06-26：将 README 展示区原 Skill Icons 与中心动态图标替换为本地 `public/images/animated-skills.svg`，最终调整为 10 个技能图标单行展示、全体轻微浮动动画，并将展示宽度调至 `980px`；使用提升权限执行 `npm run build`，构建通过。
-
-- 2026-06-26：将顶部导航第四项文案由“我的生活”调整为“加瓦之路”，并同步更新导航说明；使用提升权限执行 `npm run build`，构建通过。
-
-本地开发地址：
-
-```txt
-http://localhost:4321
-```
 
 ## Cloudflare Pages 部署方案
 
@@ -156,20 +129,15 @@ Cloudflare 控制台部署流程：
 ## 后续待讨论
 
 - 网站最终定位：学术主页、科研主页、作品集、简历页、个人品牌入口，或混合形态。
-- 是否继续高度还原 `coderxiaoluo` 的 GitHub 风格，还是迁移为更符合个人科研主页的视觉语言。
 - 左侧个人资料是否继续保留 GitHub 风格，还是改成更正式的个人介绍区。
-- README 展示区未来展示什么：技术栈、研究方向、论文摘要、项目地图、个人介绍，或动态视觉模块。
-- 动态贪吃蛇模块的具体表现形式、数据来源、动画方式和性能方案。
+- README 展示区未来除已完成的自我介绍与技术栈外，还可继续讨论是否展示研究方向、论文摘要、项目地图或动态视觉模块。
 - 科研成果、项目经历、论文、博客等内容的数据结构。
 - Cloudflare Pages 部署流程、自定义域名与构建配置。
 
 ## 待办
 
-- 替换 `coderxiaoluo` 的公开资料为用户自己的真实资料。
 - 明确维护优先级：长期易维护，还是视觉表现优先。
 - 设计正式的信息架构。
-- 确定是否保留 GitHub README 风格作为主页主视觉。
-- 讨论并实现动态贪吃蛇创意模块。
 - 静态技术徽章可使用 Shields.io 生成，入口为 `https://shields.io/badges`。静态徽章格式为 `https://img.shields.io/badge/显示文字-背景颜色?style=flat-square&logo=图标名&logoColor=图标颜色`，例如 MySQL 可使用 `https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white`。生成后应下载到 `public/images/`，再在组件中使用本地 `/images/...` 路径引用。
 - 技能图标组可使用 Skill Icons 生成，入口为 `https://skillicons.dev`。生成格式为 `https://skillicons.dev/icons?i=图标1,图标2,图标3`，例如后端技术栈可使用 `https://skillicons.dev/icons?i=java,spring,maven,mysql,redis,mongodb,docker,kubernetes,nginx,linux,git`；可追加 `&perline=6` 控制每行数量，追加 `&theme=light` 或 `&theme=dark` 控制主题。生成后同样应下载为 `public/images/skill-icons.svg` 并本地引用。
 - 后续替换 README 中心动态图标时，优先调研两类素材来源：一是 GitHub README 资源库、个人主页素材库、动图素材站等现成 `.webp` / `.gif` / `.png` 动图资源；二是使用 After Effects、Figma、Photoshop、Canva、LottieFiles 等设计工具自制并导出动图资源。同时保留第三种实现方式：使用静态 SVG 图标结合 CSS / SVG / React 动画实现轻微浮动、旋转、发光等动态效果，避免必须依赖外部动图素材。

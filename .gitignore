@@ -1,9 +1,11 @@
 node_modules/
 dist/
 .astro/
+.idea/
 .env
 .env.*
 token.txt
+log.txt
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
