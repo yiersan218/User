@@ -7,10 +7,13 @@ import SiteNav from '../components/SiteNav.astro';
 
 const javaRoadItems = [
   {
-    title: 'Java 基础',
+    title: 'Ai Agent',
     date: '阶段 01',
     description: '语法、集合、异常、泛型和常用 API 的系统复盘。',
     cover: 'code',
+    coverImage: '/images/ai-agent-cover-macaron.png',
+    coverTitle: '1.0Agent',
+    href: 'https://ncnr64zcbo47.feishu.cn/wiki/OB0jw1h5Sis8Yskn7p6czGYOnae?from=from_copylink',
     links: ['Notes'],
   },
   {
@@ -42,24 +45,33 @@ const javaRoadItems = [
     links: ['Notes'],
   },
   {
-    title: '消息队列',
+    title: 'Java 基础',
     date: '阶段 06',
     description: 'RocketMQ/Kafka 的削峰、异步解耦与可靠投递。',
     cover: 'terminal',
+    coverImage: '/images/java-basics-cover-macaron.png',
+    coverTitle: '2.1Java基础',
+    href: 'https://ncnr64zcbo47.feishu.cn/wiki/D8gWwsK1LiYjL6kYa0ZcUWlmnUe?from=from_copylink',
     links: ['Notes'],
   },
   {
-    title: '搜索服务',
+    title: 'Java 集合',
     date: '阶段 07',
-    description: 'Elasticsearch 索引设计、检索排序和同步链路。',
-    cover: 'dashboard',
+    description: '系统学习 List、Set、Map 等集合体系、常用实现与适用场景。',
+    cover: 'code',
+    coverImage: '/images/java-collections-cover-macaron.png',
+    coverTitle: '2.2Java集合',
+    href: 'https://ncnr64zcbo47.feishu.cn/wiki/SjyDwJISQid2QQklRQccKLHjnNe?from=from_copylink',
     links: ['Code'],
   },
   {
-    title: 'Docker 部署',
+    title: 'Java 并发',
     date: '阶段 08',
-    description: '镜像构建、容器编排、环境变量和日志采集。',
+    description: '系统学习线程、线程池、锁机制与并发编程模型。',
     cover: 'code',
+    coverImage: '/images/java-concurrency-cover-macaron.png',
+    coverTitle: '2.3Java并发',
+    href: 'https://ncnr64zcbo47.feishu.cn/wiki/BBhYwB3pniNX7KkT0P1cMuALnne?from=from_copylink',
     links: ['Docs'],
   },
   {
@@ -84,9 +96,9 @@ const javaRoadItems = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="壹贰叁218 的加瓦之路展示页。" />
+    <meta name="description" content="壹贰叁218 的学习之路展示页。" />
     <FaviconLinks />
-    <title>加瓦之路 | coderxiaoliao</title>
+    <title>学习之路 | coderxiaoliao</title>
   </head>
   <body>
     <SnakeGridBackground />
@@ -94,12 +106,12 @@ const javaRoadItems = [
 
     <main class="projects-shell java-road-shell">
       <header class="projects-hero">
-        <h1>记录我的加瓦之路</h1>
+        <h1>记录我的学习之路</h1>
       </header>
 
-      <section class="projects-grid java-road-grid" aria-label="加瓦之路列表">
+      <section class="projects-grid java-road-grid" aria-label="学习之路列表">
         {javaRoadItems.map((item) => (
-          <ProjectCard item={item} variant="tile" />
+          <ProjectCard item={item} variant="tile" hideActions hideMeta />
         ))}
       </section>
     </main>

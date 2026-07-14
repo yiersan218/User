@@ -4,26 +4,57 @@ export interface ProjectItem {
   date: string;
   description: string;
   cover: 'dashboard' | 'terminal' | 'chart' | 'gallery' | 'profile' | 'paper' | 'code' | 'timeline';
+  coverImage?: string;
+  coverTitle?: string;
+  href?: string;
   links: string[];
 }
 
 interface Props {
   item: ProjectItem;
   variant?: 'standard' | 'strip' | 'tile';
+  hideActions?: boolean;
+  hideMeta?: boolean;
 }
 
-const { item, variant = 'standard' } = Astro.props;
+const { item, variant = 'standard', hideActions = false, hideMeta = false } = Astro.props;
+
+const agentScaffoldHref = 'https://ncnr64zcbo47.feishu.cn/wiki/WrQMwK58vigqu7kZz8ucnueNnxg?from=from_copylink';
+const isAgentScaffoldCard = item.cover === 'chart';
+const cardHref = item.href ?? (isAgentScaffoldCard ? agentScaffoldHref : undefined);
+const isLinkedCard = Boolean(cardHref);
 ---
 
-<article class:list={['project-card', `project-card-${variant}`]}>
-  <div class:list={['project-cover', `project-cover-${item.cover}`]} aria-hidden="true">
-    <div class="cover-window">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+<div class:list={['project-card-shell', { 'project-card-shell-titled': item.coverTitle }]}>
+  {item.coverTitle && (
+    <div class="project-card-overline">{item.coverTitle}</div>
+  )}
 
-    {item.cover === 'dashboard' && (
+  <article class:list={['project-card', `project-card-${variant}`, { 'project-card-clickable': isLinkedCard }]}>
+  {cardHref && (
+    <a
+      class="project-card-hitarea"
+      href={cardHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${item.title} details`}
+    ></a>
+  )}
+
+  <div class:list={['project-cover', `project-cover-${item.cover}`]} aria-hidden="true">
+    {!item.coverImage && !isAgentScaffoldCard && (
+      <div class="cover-window">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    )}
+
+    {item.coverImage && (
+      <img class="cover-image" src={item.coverImage} alt="" loading="lazy" />
+    )}
+
+    {!item.coverImage && item.cover === 'dashboard' && (
       <div class="cover-dashboard">
         <div class="cover-sidebar"></div>
         <div class="cover-main">
@@ -43,7 +74,7 @@ const { item, variant = 'standard' } = Astro.props;
       </div>
     )}
 
-    {item.cover === 'terminal' && (
+    {!item.coverImage && item.cover === 'terminal' && (
       <div class="cover-terminal">
         <div>
           <span>$ pnpm agent:run</span>
@@ -55,18 +86,11 @@ const { item, variant = 'standard' } = Astro.props;
       </div>
     )}
 
-    {item.cover === 'chart' && (
-      <div class="cover-chart">
-        <div class="cover-score">
-          <span style="--w: 92%"></span>
-          <span style="--w: 78%"></span>
-          <span style="--w: 64%"></span>
-        </div>
-        <div class="cover-logo">AI</div>
-      </div>
+    {!item.coverImage && item.cover === 'chart' && (
+      <img class="cover-image" src="/images/ai-agent-scaffold-cover-v3.png" alt="" loading="lazy" />
     )}
 
-    {item.cover === 'gallery' && (
+    {!item.coverImage && item.cover === 'gallery' && (
       <div class="cover-gallery">
         <span></span>
         <span></span>
@@ -79,7 +103,7 @@ const { item, variant = 'standard' } = Astro.props;
       </div>
     )}
 
-    {item.cover === 'profile' && (
+    {!item.coverImage && item.cover === 'profile' && (
       <div class="cover-profile">
         <img src="/images/profile-avatar.png" alt="" />
         <span></span>
@@ -88,7 +112,7 @@ const { item, variant = 'standard' } = Astro.props;
       </div>
     )}
 
-    {item.cover === 'paper' && (
+    {!item.coverImage && item.cover === 'paper' && (
       <div class="cover-paper">
         <span></span>
         <span></span>
@@ -98,7 +122,7 @@ const { item, variant = 'standard' } = Astro.props;
       </div>
     )}
 
-    {item.cover === 'code' && (
+    {!item.coverImage && item.cover === 'code' && (
       <div class="cover-code">
         <span>public class Main &#123;</span>
         <span>  service.start();</span>
@@ -108,7 +132,7 @@ const { item, variant = 'standard' } = Astro.props;
       </div>
     )}
 
-    {item.cover === 'timeline' && (
+    {!item.coverImage && item.cover === 'timeline' && (
       <div class="cover-timeline">
         <span></span>
         <span></span>
@@ -120,24 +144,27 @@ const { item, variant = 'standard' } = Astro.props;
 
   <div class="project-content">
     <h2>{item.title}</h2>
-    <p class="project-date">{item.date}</p>
-    <p class="project-description">{item.description}</p>
-    <div class="project-actions">
-      {item.links.map((link) => (
-        <a href="#" aria-label={`${item.title} ${link}`}>
-          {link === 'GitHub' && (
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 1.25a6.75 6.75 0 0 0-2.13 13.16c.34.06.46-.15.46-.33v-1.25c-1.9.41-2.3-.82-2.3-.82-.31-.78-.76-.99-.76-.99-.62-.42.05-.42.05-.42.69.05 1.05.71 1.05.71.61 1.04 1.6.74 1.99.57.06-.44.24-.74.43-.91-1.52-.17-3.12-.76-3.12-3.38 0-.75.27-1.36.71-1.84-.07-.17-.31-.87.07-1.82 0 0 .58-.19 1.89.7A6.6 6.6 0 0 1 8 4.1c.57 0 1.15.08 1.69.23 1.31-.89 1.89-.7 1.89-.7.38.95.14 1.65.07 1.82.44.48.71 1.09.71 1.84 0 2.63-1.6 3.21-3.13 3.38.25.21.47.63.47 1.27v2.14c0 .18.12.39.47.33A6.75 6.75 0 0 0 8 1.25Z" />
-            </svg>
-          )}
-          {link !== 'GitHub' && (
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M4.75 2.25h4.6L12.75 5.6v8.15h-8V2.25Zm4.5.25v3.2h3.25M6.5 8.25h4M6.5 10.5h4M6.5 12.75h2.2" />
-            </svg>
-          )}
-          <span>{link}</span>
-        </a>
-      ))}
-    </div>
+    {!hideMeta && !isLinkedCard && <p class="project-date">{item.date}</p>}
+    {!hideMeta && <p class="project-description">{item.description}</p>}
+    {!hideActions && !isLinkedCard && (
+      <div class="project-actions">
+        {item.links.map((link) => (
+          <a href="#" aria-label={`${item.title} ${link}`}>
+            {link === 'GitHub' && (
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.25a6.75 6.75 0 0 0-2.13 13.16c.34.06.46-.15.46-.33v-1.25c-1.9.41-2.3-.82-2.3-.82-.31-.78-.76-.99-.76-.99-.62-.42.05-.42.05-.42.69.05 1.05.71 1.05.71.61 1.04 1.6.74 1.99.57.06-.44.24-.74.43-.91-1.52-.17-3.12-.76-3.12-3.38 0-.75.27-1.36.71-1.84-.07-.17-.31-.87.07-1.82 0 0 .58-.19 1.89.7A6.6 6.6 0 0 1 8 4.1c.57 0 1.15.08 1.69.23 1.31-.89 1.89-.7 1.89-.7.38.95.14 1.65.07 1.82.44.48.71 1.09.71 1.84 0 2.63-1.6 3.21-3.13 3.38.25.21.47.63.47 1.27v2.14c0 .18.12.39.47.33A6.75 6.75 0 0 0 8 1.25Z" />
+              </svg>
+            )}
+            {link !== 'GitHub' && (
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M4.75 2.25h4.6L12.75 5.6v8.15h-8V2.25Zm4.5.25v3.2h3.25M6.5 8.25h4M6.5 10.5h4M6.5 12.75h2.2" />
+              </svg>
+            )}
+            <span>{link}</span>
+          </a>
+        ))}
+      </div>
+    )}
   </div>
-</article>
+  </article>
+</div>
